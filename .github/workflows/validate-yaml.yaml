@@ -8,5 +8,5 @@ jobs:
       - name: yaml-lint
         uses: ibiqlik/action-yamllint@master
         with:
-          file_or_dir: ./**/.yaml
+          file_or_dir: .
           config_data: relaxed
