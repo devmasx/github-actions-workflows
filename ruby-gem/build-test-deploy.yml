@@ -3,7 +3,7 @@ name: Ruby gem
 on:
   push:
     branches:
-      - "*"
+      - '*'
     tags:
       - v*
 

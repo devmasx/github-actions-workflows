@@ -7,3 +7,6 @@ jobs:
       - uses: actions/checkout@master
       - name: yaml-lint
         uses: ibiqlik/action-yamllint@master
+        with:
+          file_or_dir: ./**/.yaml
+          config_data: relaxed
