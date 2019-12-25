@@ -1,0 +1,56 @@
+name: React APP
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up Nodejs 10.16.3
+      uses: actions/setup-node@master
+      with:
+        version: 10.16.3
+
+    - name: Install
+      run: npm ci
+
+    - name: Test
+      run: npm test
+
+    - name: Build
+      run: npm build
+
+  deploy:
+    if: contains(github.ref, 'master')
+    env:
+      APP_NAME: APP_NAME
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: login
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        with:
+          args: container:login
+
+      - name: push
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        with:
+          args: container:push -a $APP_NAME web
+
+      - name: release
+        uses: actions/heroku@master
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        with:
+          args: container:release -a $APP_NAME web
