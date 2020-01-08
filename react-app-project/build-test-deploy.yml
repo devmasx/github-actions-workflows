@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  test:
+  build-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -27,6 +27,7 @@ jobs:
 
   deploy:
     if: contains(github.ref, 'master')
+    needs: build-test
     env:
       APP_NAME: APP_NAME
     runs-on: ubuntu-latest
