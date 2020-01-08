@@ -30,6 +30,7 @@ jobs:
 
   deploy:
     if: contains(github.ref, 'refs/tags/v')
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
