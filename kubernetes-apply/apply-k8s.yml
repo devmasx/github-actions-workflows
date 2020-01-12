@@ -1,0 +1,28 @@
+name: Apply yml config
+
+on:
+  push:
+    paths:
+      - "kubernetes/**/*"
+    branches:
+      - "master"
+
+env:
+  GCP_PROJECT: GCP_PROJECT
+  GKE_ZONE: us-central1-a
+  GKE_CLUSTER: GKE_CLUSTER_NAME
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "271.0.0"
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - run: gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $GCP_PROJECT
+
+      - name: Apply k8s config
+        run: kubectl apply -f kubernetes/SERVICE_CONFIG.yaml

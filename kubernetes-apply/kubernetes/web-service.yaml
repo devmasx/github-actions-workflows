@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: web-server
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: web-server
+status:
+  loadBalancer: {}
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: web-server
+  name: web-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-server
+  template:
+    metadata:
+      labels:
+        app: web-server
+    spec:
+      containers:
+        - image: IMAGE_SERVICE
+          name: SERVICE_CONTAINER_NAME
+          # env:
+          #   - name: SERVICE_ENV
+          #     value: "SERVICE_ENV"
+          # envFrom:
+          #   - configMapRef:
+          #       name: CONFIG_MAP
+          #   - secretRef:
+          #       name: CONFIG_SECRET_CONFIG
